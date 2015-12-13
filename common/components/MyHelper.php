@@ -15,7 +15,9 @@ use common\models\Struk;
 
 class MyHelper extends Component {
 
+
     //membuat angka random 3karakter
+
     public function random() {
         $str = '';
         for ($i = 0; $i < 3; $i++) {
@@ -24,34 +26,154 @@ class MyHelper extends Component {
 
         return $str;
     }
-
+    //fungsi tanggal format indonesia
+    function indonesian_date ($timestamp = '', $date_format = 'l, j F Y | H:i', $suffix = 'WIB') {
+    if (trim ($timestamp) == '')
+    {
+            $timestamp = time ();
+    }
+    elseif (!ctype_digit ($timestamp))
+    {
+        $timestamp = strtotime ($timestamp);
+    }
+    # remove S (st,nd,rd,th) there are no such things in indonesia :p
+    $date_format = preg_replace ("/S/", "", $date_format);
+    $pattern = array (
+        '/Mon[^day]/','/Tue[^sday]/','/Wed[^nesday]/','/Thu[^rsday]/',
+        '/Fri[^day]/','/Sat[^urday]/','/Sun[^day]/','/Monday/','/Tuesday/',
+        '/Wednesday/','/Thursday/','/Friday/','/Saturday/','/Sunday/',
+        '/Jan[^uary]/','/Feb[^ruary]/','/Mar[^ch]/','/Apr[^il]/','/May/',
+        '/Jun[^e]/','/Jul[^y]/','/Aug[^ust]/','/Sep[^tember]/','/Oct[^ober]/',
+        '/Nov[^ember]/','/Dec[^ember]/','/January/','/February/','/March/',
+        '/April/','/June/','/July/','/August/','/September/','/October/',
+        '/November/','/December/',
+    );
+    $replace = array ( 'Sen','Sel','Rab','Kam','Jum','Sab','Min',
+        'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu',
+        'Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des',
+        'Januari','Februari','Maret','April','Juni','Juli','Agustus','Sepember',
+        'Oktober','November','Desember',
+    );
+    $date = date ($date_format, $timestamp);
+    $date = preg_replace ($pattern, $replace, $date);
+    $date = "{$date} {$suffix}";
+    return $date;
+} 
     //ilham manambahkan fungsi terbilang gunaya ketika ada angka makaakan ditampilkan terbilangya
-    public function Terbilang($x)
-        {
-          $ambil = array("", "satu", "dua", "tiga", "empat", "lima", "enam ", "tujuh", 
-
-        "delapan", "sembilan", "sepuluh", "sebelas");
-          if ($x < 12)
+    public function Terbilang($x) {
+        $ambil = array("", "satu", "dua", "tiga", "empat", "lima", "enam ", "tujuh",
+            "delapan", "sembilan", "sepuluh", "sebelas", "koma");
+        if ($x < 12)
             return " " . $ambil[$x];
-          elseif ($x < 20)
+        elseif ($x < 20)
             return self::Terbilang($x - 10) . " belas";
-          elseif ($x < 100)
+        elseif ($x < 100)
             return self::Terbilang($x / 10) . " puluh" . self::Terbilang($x % 10);
-          elseif ($x < 200)
+        elseif ($x < 200)
             return " seratus" . self::Terbilang($x - 100);
-          elseif ($x < 1000)
+        elseif ($x < 1000)
             return self::Terbilang($x / 100) . " ratus" . self::Terbilang($x % 100);
-          elseif ($x < 2000)
+        elseif ($x < 2000)
             return " seribu" . self::Terbilang($x - 1000);
-          elseif ($x < 1000000)
+        elseif ($x < 1000000)
             return self::Terbilang($x / 1000) . " ribu" . self::Terbilang($x % 1000);
-          elseif ($x < 1000000000)
+        elseif ($x < 1000000000)
             return self::Terbilang($x / 1000000) . " juta" . self::Terbilang($x % 1000000);
         elseif ($x < 1000000000)
             return self::Terbilang($x / 1000000000) . " milyar" . self::Terbilang($x % 1000000000);
+    }
+
+ 
+
+    public function number_to_words($number)
+    {
+        $before_comma = trim(self::to_word($number));
+        $after_comma = trim(self::comma($number));
+        return ucwords($results = $before_comma.' koma '.$after_comma);
+    }
+
+    public function to_word($number)
+    {
+        $words = "";
+        $arr_number = array(
+        "",
+        "satu",
+        "dua",
+        "tiga",
+        "empat",
+        "lima",
+        "enam",
+        "tujuh",
+        "delapan",
+        "sembilan",
+        "sepuluh",
+        "sebelas");
+
+        if($number<12)
+        {
+            $words = " ".$arr_number[$number];
         }
+        else if($number<20)
+        {
+            $words = self::to_word($number-10)." belas";
+        }
+        else if($number<100)
+        {
+            $words = self::to_word($number/10)." puluh ".self::to_word($number%10);
+        }
+        else if($number<200)
+        {
+            $words = "seratus ".self::to_word($number-100);
+        }
+        else if($number<1000)
+        {
+            $words = self::to_word($number/100)." ratus ".self::to_word($number%100);
+        }
+        else if($number<2000)
+        {
+            $words = "seribu ".self::to_word($number-1000);
+        }
+        else if($number<1000000)
+        {
+            $words = self::to_word($number/1000)." ribu ".self::to_word($number%1000);
+        }
+        else if($number<1000000000)
+        {
+            $words = self::to_word($number/1000000)." juta ".self::to_word($number%1000000);
+        }
+        else
+        {
+            $words = "undefined";
+        }
+        return $words;
+    }
 
+    public function comma($number)
+    {
+        $after_comma = stristr($number,'.');
+        $arr_number = array(
+        "nol",
+        "satu",
+        "dua",
+        "tiga",
+        "empat",
+        "lima",
+        "enam",
+        "tujuh",
+        "delapan",
+        "sembilan");
 
+        $results = "";
+        $length = strlen($after_comma);
+        $i = 1;
+        while($i<$length)
+        {
+            $get = substr($after_comma,$i,1);
+            $results .= " ".$arr_number[$get];
+            $i++;
+        }
+        return $results;
+    }
     //membuat password otomatis
     public function GeneratePassword() {
 
@@ -63,43 +185,106 @@ class MyHelper extends Component {
         }
         return $rand;
     }
-    
-    public function Cut($string, $max_length)
-    {
-        if (strlen($string) > $max_length)
-        {
-        $string = substr($string, 0, $max_length);
-        $pos = strrpos($string, " ");
-        if($pos === false)
-        {
-            return substr($string, 0, $max_length)."...";
-        }
-        return substr($string, 0, $pos)."...";
-        }
-        else
-        {
-        return $string;
+
+    public function Cut($string, $max_length) {
+        if (strlen($string) > $max_length) {
+            $string = substr($string, 0, $max_length);
+            $pos = strrpos($string, " ");
+            if ($pos === false) {
+                return substr($string, 0, $max_length) . "...";
+            }
+            return substr($string, 0, $pos) . "...";
+        } else {
+            return $string;
         }
     }
-    public function Arsip($arsip){
+
+    public function Arsip($arsip) {
         //fungsi untuk memanggil arsip
         switch ($arsip) {
             case 3: {
-               $arsip = 'Sudah Di Simpan Arsip';
-
-            }
+                    $arsip = 'Sudah Di Simpan Arsip';
+                }
                 break;
-            default:
-              {
-                $arsip = 'Sudah Di Simpan Arsip';
-              }
+            default: {
+                    $arsip = 'Sudah Di Simpan Arsip';
+                }
                 break;
         }
         return $arsip;
     }
-
-
-
+        public function Kwitansi($kw) {
+        //fungsi untuk memanggil kwitansi
+        switch ($kw) {
+            case 2: {
+                    $kw = 'Tidak Ada Kwitansi';
+                }
+                break;
+                 case 1: {
+                    $kw = 'Kwitansi Ada';
+                }
+                break;
+            default: {
+                    $kw = 'Pilih Status Kwitansi';
+                }
+                break;
+        }
+        return $kw;
+    }
+    //aliasa Untuk Pagu
+      public function Apagu($kw) {
+        //fungsi untuk memanggil kwitan i110000,120000,130000,161100,151000
+        switch ($kw) {
+            case 110000 : {
+                    $kw = 'Deputi PI';
+                }
+                break;
+                 case 120000: {
+                    $kw = 'Deputi PKN';
+                }
+                break;
+                case 130000: {
+                    $kw = 'Sekretariat Utama';
+                }
+                break;
+                  case 161100: {
+                    $kw = 'Inspektorat';
+                }
+                break;
+                  case 151000: {
+                    $kw = 'Balai Diklat';
+                }
+                break;
+        }
+        return $kw;
+    }
+    //untuk memanggil tingkatat berdasarkan eselon
+        public function Tingkat($kw) {
+        //fungsi untuk memanggil kwitansi
+        switch ($kw) {
+            case 1: {
+                    $kw = 'Tingkat A';
+                }
+                break;
+            case 2: {
+                    $kw = 'Tingkat B';
+                }
+                break;
+            case 3: {
+                    $kw = 'Tingkat C';
+                }
+                break;
+            case 99: {
+                    $kw = 'Tingkat D';
+                }
+                break;
+            default: {
+                    $kw = 'Tidak ada';
+                }
+                break;
+        }
+        return $kw;
+    }
     //memanggil tahun 5 tahun kebelakang
     public function CallTahun() {
         $tahun = date('Y') - 5;
@@ -117,6 +302,12 @@ class MyHelper extends Component {
                 ->Count();
         return $user;
     }
+     public function Negara($id) {
+        $gole = \backend\models\DafNegara::find()
+                ->where(['kode_negara' => $id])
+                ->one();
+        return $gole->nama;
+    }
 
     public function Gole($id) {
         $gole = Gol::find()
@@ -124,24 +315,34 @@ class MyHelper extends Component {
                 ->one();
         return $gole->golongan;
     }
-     public function Pangkat($id) {
+
+    public function Pangkat($id) {
         $gole = Gol::find()
                 ->where(['gol_id' => $id])
                 ->one();
         return $gole->pangkat;
     }
-      public function Unit($id) {
+
+    public function Unit($id) {
         $gole = \common\models\DaftarUnit::find()
                 ->where(['unit_id' => $id])
                 ->one();
         return $gole->nama;
     }
-      public function Angkutan($id) {
+    
+     public function Real($id) {
+        $real = Yii::$app->db->createCommand('select sum(pagu) from t_mak where unit_id='.$id)->queryScalar();
+        return $real;
+    }
+    
+
+    public function Angkutan($id) {
         $gole = \common\models\Angkutan::find()
                 ->where(['angkutan_id' => $id])
                 ->one();
         return $gole->nama;
     }
+
     public function Kota($id) {
         $gole = \common\models\MasterKokab::find()
                 ->where(['kota_id' => $id])
@@ -157,7 +358,8 @@ class MyHelper extends Component {
                 ->one();
         return $struk->eselon_id;
     }
-     public function Jab($id) {
+
+    public function Jab($id) {
         //$ese = Ese::findOne()
         $struk = Struk::find()
                 ->where(['struk_id' => $id])
@@ -166,7 +368,7 @@ class MyHelper extends Component {
         return $struk->nama;
     }
 
-       public function Eselon($id) {
+    public function Eselon($id) {
         //$ese = Ese::findOne()
         $struk = \common\models\DafEse::find()
                 ->where(['eselon_id' => $id])
@@ -220,7 +422,8 @@ class MyHelper extends Component {
         }
         return $bln;
     }
-      public function BacaHari($bln) {
+
+    public function BacaHari($bln) {
         switch ($bln) {
             case 1 : {
                     $bln = 'Satu';
@@ -264,55 +467,55 @@ class MyHelper extends Component {
             case 14 : {
                     $bln = 'Empat Belas';
                 }break;
-           case 15 : {
+            case 15 : {
                     $bln = 'Lima Belas';
                 }break;
-           case 16 : {
+            case 16 : {
                     $bln = 'Enam Belas';
                 }break;
-          case 17 : {
+            case 17 : {
                     $bln = 'Tujuh Belas';
                 }break;
-             case 18 : {
+            case 18 : {
                     $bln = 'Delapan Belas';
                 }break;
-                 case 19 : {
+            case 19 : {
                     $bln = 'Sembilan Belas';
                 }break;
-                 case 20 : {
+            case 20 : {
                     $bln = 'Dua Puluh';
                 }break;
-                 case 21 : {
+            case 21 : {
                     $bln = 'Dua Puluh Satu';
                 }break;
-                   case 22 : {
+            case 22 : {
                     $bln = 'Dua Puluh Dua';
                 }break;
-                   case 23 : {
+            case 23 : {
                     $bln = 'Dua Puluh Tiga';
                 }break;
-                   case 24 : {
+            case 24 : {
                     $bln = 'Dua Puluh Empat';
                 }break;
-                   case 25 : {
+            case 25 : {
                     $bln = 'Dua Puluh Lima';
                 }break;
-                   case 26 : {
+            case 26 : {
                     $bln = 'Dua Puluh Enam';
                 }break;
-                   case 27 : {
+            case 27 : {
                     $bln = 'Dua Puluh Tujuh';
                 }break;
-                   case 28 : {
+            case 28 : {
                     $bln = 'Dua Puluh Delapan';
                 }break;
-                   case 29 : {
+            case 29 : {
                     $bln = 'Dua Puluh Sembilan';
                 }break;
-                   case 30 : {
+            case 30 : {
                     $bln = 'Tiga Puluh ';
                 }break;
-                   case 31 : {
+            case 31 : {
                     $bln = 'Tiga Puluh Satu';
                 }break;
             default: {
@@ -321,18 +524,27 @@ class MyHelper extends Component {
         }
         return $bln;
     }
-    public function Formattgl($tgl){
-            $tanggal = substr($tgl,8,2);
-            $bulan = self::BacaBulan(substr($tgl,5,2));
-            $tahun = substr($tgl,0,4);
-            return $tanggal.' '.$bulan.' '.$tahun;
-    }   
-     public function Berangkattgl($tgl){
-            $tanggal = substr($tgl,8,2)-1;
-            $bulan = self::BacaBulan(substr($tgl,5,2));
-            $tahun = substr($tgl,0,4);
-            return $tanggal.' '.$bulan.' '.$tahun;
-    }   
+
+    public function Formattgl($tgl) {
+        $tanggal = substr($tgl, 8, 2);
+        $bulan = self::BacaBulan(substr($tgl, 5, 2));
+        $tahun = substr($tgl, 0, 4);
+        return $tanggal . ' ' . $bulan . ' ' . $tahun;
+    }
+
+    public function Berangkattgl($tgl) {
+        $tanggal = substr($tgl, 8, 2) - 1;
+        $bulan = self::BacaBulan(substr($tgl, 5, 2));
+        $tahun = substr($tgl, 0, 4);
+        return $tanggal . ' ' . $bulan . ' ' . $tahun;
+    }
+
+    public function Datangtgl($tgl) {
+        $tanggal = substr($tgl, 8, 2) + 1;
+        $bulan = self::BacaBulan(substr($tgl, 5, 2));
+        $tahun = substr($tgl, 0, 4);
+        return $tanggal . ' ' . $bulan . ' ' . $tahun;
+    }
 
     public function Romawi($bln) {
         switch ($bln) {
@@ -377,6 +589,22 @@ class MyHelper extends Component {
                 }break;
         }
         return $bln;
+    }
+
+    public function Hari($hari){
+        $tanggal = $hari;
+        $day = date('D', strtotime($tanggal));
+        $dayList = array(
+            'Sun' => 'Minggu',
+            'Mon' => 'Senin',
+            'Tue' => 'Selasa',
+            'Wed' => 'Rabu',
+            'Thu' => 'Kamis',
+            'Fri' => 'Jumat',
+            'Sat' => 'Sabtu'
+        );
+        $hari = $dayList[$day];
+    return $hari;
     }
 
     //function untuk eselon
@@ -459,6 +687,26 @@ class MyHelper extends Component {
         return $day;
     }
 
+    function GetHari($hari) {
+        $hari2 = date("");
+        Switch ($hari2) {
+            case 0 : $hari = "Ahad";
+                Break;
+            case 1 : $hari = "Senin";
+                Break;
+            case 2 : $hari = "Selasa";
+                Break;
+            case 3 : $hari = "Rabu";
+                Break;
+            case 4 : $hari = "Kamis";
+                Break;
+            case 5 : $hari = "Jumat";
+                Break;
+            case 6 : $hari = "Sabtu";
+                Break;
+        } return $hari;
+    }
+
     //memanggil nama tahun, bulan hari
     public function CallDay() {
 
@@ -539,10 +787,10 @@ class MyHelper extends Component {
     }
 
     public function CountAng($id) {
-        /*$command = Yii::$app->db->createCommand("SELECT 
-                sum(transport+taksi+taksi2+lumpsum+uhr+uhr_fb+penginapan+representatif+trans_pim+inap_lain+inap_fb )
-                 FROM perjadin where nomi_id=16");*/
-         $command = Yii::$app->db->createCommand("SELECT sum(jml) FROM  simpel_rincian_biaya where id_kegiatan=".$id." GROUP BY id_kegiatan");
+        /* $command = Yii::$app->db->createCommand("SELECT 
+          sum(transport+taksi+taksi2+lumpsum+uhr+uhr_fb+penginapan+representatif+trans_pim+inap_lain+inap_fb )
+          FROM perjadin where nomi_id=16"); */
+        $command = Yii::$app->db->createCommand("SELECT sum(jml) FROM  simpel_rincian_biaya where id_kegiatan=" . $id . " and bukti_kwitansi in(1,2) GROUP BY id_kegiatan");
         $sum = $command->queryScalar();
         $counts = \backend\models\SimpelPersonil::find()
                 ->where([
@@ -550,38 +798,18 @@ class MyHelper extends Component {
                 ])
                 ->count();
 
-            if (!empty($counts)) {
-                return 'Rp.  '.$sum . ' ,00  <br/>  ( ' . $counts . ' org)';
-            } else {
-                return "-";
-            }
+        if (!empty($counts)) {
+            return 'Rp.  ' . number_format($sum,0,',','.') . '   <br/>  ( ' . $counts . ' org)';
+        } else {
+            return "-";
+        }
     }
 
-      public function CountUang($id) {
-        /*$command = Yii::$app->db->createCommand("SELECT 
-                sum(transport+taksi+taksi2+lumpsum+uhr+uhr_fb+penginapan+representatif+trans_pim+inap_lain+inap_fb )
-                 FROM perjadin where nomi_id=16");*/
-        $command = Yii::$app->db->createCommand("SELECT sum(jml) FROM  simpel_rincian_biaya where id_kegiatan=".$id." GROUP BY id_kegiatan");
-        $sum = $command->queryScalar();
-        $counts = \backend\models\SimpelPersonil::find()
-                ->where([
-                    'id_kegiatan' => $id,
-                ])
-                ->count();
-
-
-            if (!empty($counts)) {
-                return 'Rp.  '.$sum . ' ,00 ';
-            } else {
-                return "-";
-            }
-    }
-
-  public function CountJum($id) {
-        /*$command = Yii::$app->db->createCommand("SELECT 
-                sum(transport+taksi+taksi2+lumpsum+uhr+uhr_fb+penginapan+representatif+trans_pim+inap_lain+inap_fb )
-                 FROM perjadin where nomi_id=16");*/
-        $command = Yii::$app->db->createCommand("SELECT sum(jml) FROM  simpel_rincian_biaya where id_kegiatan=".$id." GROUP BY id_kegiatan");
+    public function CountUang($id) {
+        /* $command = Yii::$app->db->createCommand("SELECT 
+          sum(transport+taksi+taksi2+lumpsum+uhr+uhr_fb+penginapan+representatif+trans_pim+inap_lain+inap_fb )
+          FROM perjadin where nomi_id=16"); */
+        $command = Yii::$app->db->createCommand("SELECT sum(jml) FROM  simpel_rincian_biaya where id_kegiatan=" . $id . " and bukti_kwitansi in(1,2) GROUP BY id_kegiatan");
         $sum = $command->queryScalar();
         $counts = \backend\models\SimpelPersonil::find()
                 ->where([
@@ -590,114 +818,83 @@ class MyHelper extends Component {
                 ->count();
 
 
-            if (!empty($counts)) {
-                return $sum;
-            } else {
-                return "-";
-            }
+        if (!empty($counts)) {
+            return 'Rp.  ' . number_format($sum,0,',','.');
+        } else {
+            return "-";
+        }
+    }
+      public function CountKw($id) {
+        /* $command = Yii::$app->db->createCommand("SELECT 
+          sum(transport+taksi+taksi2+lumpsum+uhr+uhr_fb+penginapan+representatif+trans_pim+inap_lain+inap_fb )
+          FROM perjadin where nomi_id=16"); */
+        $command = Yii::$app->db->createCommand("SELECT sum(jml) FROM  simpel_rincian_biaya where personil_id=" . $id . " and bukti_kwitansi in(1,2) GROUP BY id_kegiatan");
+        $sum = $command->queryScalar();
+        $counts = \backend\models\SimpelPersonil::find()
+                ->where([
+                    'id_personil' => $id,
+                ])
+                ->count();
+
+
+        if (!empty($counts)) {
+            return 'Rp.  ' . number_format($sum,0,',','.');
+        } else {
+            return "-";
+        }
     }
 
-    public function Pagu() {
-        $command = Yii::$app->db->createCommand("SELECT 
-                sum(pagu) as total
-                 FROM t_mak where unit_mak in('BP','BHO','BU','Biro Umum','INSPEK','BDL') and t_mak.tahun=2014");
 
+
+    public function CountJum($id) {
+        /* $command = Yii::$app->db->createCommand("SELECT 
+          sum(transport+taksi+taksi2+lumpsum+uhr+uhr_fb+penginapan+representatif+trans_pim+inap_lain+inap_fb )
+          FROM perjadin where nomi_id=16"); */
+        $command = Yii::$app->db->createCommand("SELECT sum(jml) FROM  simpel_rincian_biaya where id_kegiatan=" . $id . " and bukti_kwitansi in(1,2) GROUP BY id_kegiatan");
         $sum = $command->queryScalar();
+        $counts = \backend\models\SimpelPersonil::find()
+                ->where([
+                    'id_kegiatan' => $id,
+                ])
+                ->count();
 
+
+        if (!empty($counts)) {
+            return $sum;
+        } else {
+            return "-";
+        }
+    }
+
+     public function CountUper($id) {
+        /* $command = Yii::$app->db->createCommand("SELECT 
+          sum(transport+taksi+taksi2+lumpsum+uhr+uhr_fb+penginapan+representatif+trans_pim+inap_lain+inap_fb )
+          FROM perjadin where nomi_id=16"); */
+        $command = Yii::$app->db->createCommand("SELECT sum(jml) FROM  simpel_rincian_biaya where personil_id=" . $id . " and bukti_kwitansi in(1,2) GROUP BY id_kegiatan");
+        $sum = $command->queryScalar();
+        $counts = \backend\models\SimpelPersonil::find()
+                ->where([
+                    'id_personil' => $id,
+                ])
+                ->count();
+
+
+        if (!empty($counts)) {
+            return $sum;
+        } else {
+            return "-";
+        }
+    }
+
+      public function Rincian($id) {
+        $sum = Yii::$app->db->createCommand("SELECT sum(jml) FROM  simpel_rincian_biaya where id_kegiatan=" . $id . " and bukti_kwitansi in(1,2) GROUP BY id_kegiatan")->queryScalar();
         return $sum;
-    }
+     }
 
-    public function Pagu2() {
-        $command = Yii::$app->db->createCommand("SELECT 
-                sum(pagu)
-                 FROM t_mak where unit_mak in('DIFRZR', 'DPIBN', 'DPFRZR', 'DI2BN', 'DK2N') and t_mak.tahun=2014");
-        $sum = $command->queryScalar();
-        if ($sum) {
-            return $sum . ' <br/> ';
-        }
-    }
+     
+   
 
-    public function Pagu3() {
-        $command = Yii::$app->db->createCommand("SELECT 
-                sum(pagu)
-                 FROM t_mak where unit_mak in('P2STPFRZR', 'P2STPIBN', 'DP2FRZR', 'DP2IBN') and t_mak.tahun=2014");
-        $sum = $command->queryScalar();
-        if ($sum) {
-            return $sum . ' <br/> ';
-        }
-    }
 
-    public function Pagu4() {
-        $command = Yii::$app->db->createCommand("SELECT 
-                sum(pagu)
-                 FROM t_mak where unit_mak in('SKLN') and t_mak.tahun=2014");
-        $sum = $command->queryScalar();
-        if ($sum) {
-            return $sum . ' <br/> ';
-        }
-    }
-
-//akhir hitung pagu
-    //awal hitung realisasi
-
-    public function Re() {
-        $command = Yii::$app->db->createCommand("SELECT 
-                sum(transport+taksi+uhr+penginapan+representatif) 
-                FROM nominatif, perjadin, t_mak
-                where nominatif.nomi_id=perjadin.nomi_id
-                AND nominatif.mak=t_mak.mak
-                AND unit_mak in('BP','BHO','BU','Biro Umum','INSPEK','BDL')
-                AND t_mak.tahun=2014");
-        $sum = $command->queryScalar();
-        if ($sum) {
-            return $sum . ' <br/> ';
-        }
-    }
-
-//2
-    public function Re2() {
-        $command = Yii::$app->db->createCommand("SELECT 
-                sum(transport+taksi+uhr+penginapan+representatif) 
-                FROM nominatif, perjadin, t_mak
-                where nominatif.nomi_id=perjadin.nomi_id
-                AND nominatif.mak=t_mak.mak
-                AND unit_mak in('DIFRZR', 'DPIBN', 'DPFRZR', 'DI2BN', 'DK2N')
-                AND t_mak.tahun=2014");
-        $sum = $command->queryScalar();
-        if ($sum) {
-            return $sum . ' <br/> ';
-        }
-    }
-
-//3
-    public function Re3() {
-        $command = Yii::$app->db->createCommand("SELECT 
-            sum(transport+taksi+uhr+penginapan+representatif) 
-                FROM nominatif, perjadin, t_mak
-                where nominatif.nomi_id=perjadin.nomi_id
-                AND nominatif.mak=t_mak.mak
-                AND unit_mak in('P2STPFRZR', 'P2STPIBN', 'DP2FRZR', 'DP2IBN')
-                AND t_mak.tahun=2014");
-        $sum = $command->queryScalar();
-        if ($sum) {
-            return $sum . ' <br/> ';
-        }
-    }
-
-    //4
-    public function Re4() {
-        $command = Yii::$app->db->createCommand("SELECT 
-                sum(transport+taksi+uhr+penginapan+representatif) 
-                FROM nominatif, perjadin, t_mak
-                where nominatif.nomi_id=perjadin.nomi_id
-                AND nominatif.mak=t_mak.mak
-                AND unit_mak in('SKLN')
-                AND t_mak.tahun=2014");
-        $sum = $command->queryScalar();
-        if ($sum) {
-            return $sum . ' <br/> ';
-        }
-    }
 
     //total realisasi
     //awal sisa

@@ -24,6 +24,7 @@ class AppAsset extends AssetBundle
         'theme/css/main.css',
         'theme/css/wizard.css',
         'theme/css/themes.css',
+        'theme/css/override.dashboard.css'
     ];
     public $js = [
 

@@ -8,7 +8,7 @@ use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 use kartik\icons\Icon;
 use yii\helpers\Url;
-
+use  \common\components\MyHelper;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
@@ -55,16 +55,16 @@ AppAsset::register($this);
                    
 
                     <ul class="nav navbar-nav-custom pull-right">
-                        <li>
+                       
+                          <li>
                             <br/>
-                            <i class="fa fa-calendar fa-fw"></i> <?= date('d-m-Y') ?> <i class="fa fa-clock-o fa-fw pull-right"></i>&nbsp;&nbsp;
+                            <i class="fa fa-calendar fa-fw"></i> <?= MyHelper::GetDayName(date('l')).' '.MyHelper::Formattgl(date('Y-m-d')) ?> <i class="fa fa-clock-o fa-fw pull-right"></i>&nbsp;&nbsp;
                         </li>
                         
                         <li>
                             <br/>
                             <div id="txt"></div>
                         </li>
-
                         <li class="dropdown">
                             <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
                                 <?= Html::img('@web/theme/img/User-Icon.png'); ?><i class="fa fa-angle-down"></i>

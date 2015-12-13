@@ -10,9 +10,11 @@ use yii\widgets\Menu;
 <div id="sidebar">
     <div class="sidebar-scroll">
         <div class="sidebar-content">
+           <center>
             <a href="./index.php.html" class="sidebar-brand">
-           Yii2-cms
+         Yii2-starter
             </a>
+            </center>
             <div class="sidebar-section sidebar-user clearfix">
                 <div class="sidebar-user-avatar">
                     <a href="./page_ready_user_profile.php.html">
@@ -37,13 +39,6 @@ use yii\widgets\Menu;
                             $items = [
                                 ['label' => 'Home', 'url' => ['/site/index/']],
                             
-                                ['label' => 'Post', 'url' => ['/post/index'], 'items' => [
-                                    ['label' => 'All Post', 'url' => ['/post/index']],
-                                    ['label' => 'All Category', 'url' => ['/category/index']],
-                                    ['label' => 'All Tags', 'url' => ['/mimin/route']],
-                                
-                                ]],
-
                                 ['label' => 'Pengaturan', 'url' => ['/mimin/user'], 'items' => [
                                     ['label' => 'User', 'url' => ['/mimin/user']],
                                     ['label' => 'User Group', 'url' => ['/mimin/role']],

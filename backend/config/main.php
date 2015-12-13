@@ -23,15 +23,22 @@ return [
         // add wildcard allowed action here!
         'site/*',
         'debug/*',
-        //'*',
-        //'mimin/*', // only in dev mode
+        '*',
+        'mimin/*', // only in dev mode
     	],
 	],
-     'homeUrl' => '/yii2-cms/admin',
+     'homeUrl' => '/yii2-starter/admin',
     'components' => [
+      'assetManager' => [
+            'bundles' => [
+                'yii\bootstrap\BootstrapAsset' => [
+                    'js' => ['js/bootstrap.js']
+                ],
+            ],
+        ],
 
            'request' => [
-            'baseUrl' => '/yii2-cms/admin',
+            'baseUrl' => '/yii2-starter/admin',
         ],
         
           'urlManager' => [
