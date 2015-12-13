@@ -12,8 +12,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use \common\models\Post;
-use yii\data\Pagination;
+
 /**
  * Site controller
  */
@@ -73,18 +72,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        
-        $unit = Post::find();
-        $pages = new Pagination(['totalCount' => 4]);
-        $models = $unit->offset($pages->offset,$pages->pageSize=100)
-            ->limit($pages->limit)
-            ->all();
-
-       return $this->render('index', [
-            'pages' => $pages,
-            'models' => $models,
-          
-        ]);
+        return $this->render('index');
     }
 
     /**
@@ -100,8 +88,6 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            print_r($_POST['LoginForm']['username']);
-            die();
             return $this->goBack();
         } else {
             return $this->render('login', [
