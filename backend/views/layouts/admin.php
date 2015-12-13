@@ -20,8 +20,7 @@ AppAsset::register($this);
     <head>
         <meta charset="utf-8" />
         <title>ILHAM CMS</title>
-        <meta name="description" content="ProUI is a Responsive Admin Dashboard Template created by pixelcave and published on Themeforest. This is the demo of ProUI! You need to purchase a license for legal use!" />
-        <meta name="author" content="pixelcave" />
+        <meta name="author" content="ilham malik ibrahim" />
         <meta name="robots" content="noindex, nofollow" />
         <meta name="Ilham Malik Ibrahim" content="Ilhan Malik Ibrahim">
         <meta name="www.ipteku.com" content="ilhammalik19@gmail.com">

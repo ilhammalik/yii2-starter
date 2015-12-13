@@ -20,7 +20,15 @@ use yii\widgets\Menu;
                 </div>
                 <div class="sidebar-user-name"><?= Yii::$app->user->identity->username ?></div>
                 <div class="sidebar-user-links">
-                    <a href="./login.php.html" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="gi gi-exit"></i></a>
+                  <?=
+                                    Html::a(Yii::t('app', ' <i class="fa fa-sign-out fa-fw"></i> Logout'), ['/site/logout'], [
+                                        //'class' => 'btn btn-danger',
+                                        'data' => [
+                                            'confirm' => Yii::t('app', 'Apakah Anda Yakin?'),
+                                            'method' => 'post',
+                                        ],
+                                    ])
+                                    ?>
                 </div>
             </div>
             <?php
@@ -42,11 +50,7 @@ use yii\widgets\Menu;
                                     ['label' => 'Generator', 'url' => ['/mimin/route']],
                                 
                                 ]],
-                                [
-                                        'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                                        'url' => ['/site/logout'],
-                                        'linkOptions' => ['data-method' => 'post']
-                                    ],
+                                
                             ];
                             $items = Mimin::filterRouteMenu($items);
                             if(count($items)>0){

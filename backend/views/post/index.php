@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'user_id',
             [
             'class' => 'yii\grid\ActionColumn',
-            'contentOptions' => ['style' => 'width:13px; z-index:20;'],
+            'contentOptions' => ['style' => 'width:170px; z-index:20;'],
             'header' => 'Actions',
             'template' => Mimin::filterTemplateActionColumn(['view','update','delete'], $this->context->route),
             'buttons' => [
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);},
               'update' => function ($url, $model) {
             return Html::a(' <button type="button" class="btn btn-danger data-placement="top">
-            lihat
+            Ubah
             </button>', Yii::$app->urlManager->createUrl(['post/update','tahun' => $model->tahun, 'judul' => $model->title]), [
             'title' => Yii::t('yii', 'Proses'),
             'data-confirm' => Yii::t('yii', 'Apakah Anda Yakin Ingin Melakukan Proses?'),
