@@ -1,7 +1,7 @@
 Yii2-starter base on Yii2 
 
-1.Template
-2.Extention Yii2-mimin
+1.Template <br/>
+2.Extention Yii2-mimin<br/>
 
 ===============================
 Author by Ilham Malik Ibrahim 
