@@ -1,4 +1,8 @@
-Yii2-cms base on Yii2 version Advanced 
+Yii2-starter base on Yii2 
+
+1.Template
+2.Extention Yii2-mimin
+
 ===============================
 Author by Ilham Malik Ibrahim 
 <br/>
