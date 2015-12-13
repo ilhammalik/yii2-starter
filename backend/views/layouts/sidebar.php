@@ -11,7 +11,7 @@ use yii\widgets\Menu;
     <div class="sidebar-scroll">
         <div class="sidebar-content">
            <center>
-            <a href="./index.php.html" class="sidebar-brand">
+            <a href="#" class="sidebar-brand">
          Yii2-starter
             </a>
             </center>
